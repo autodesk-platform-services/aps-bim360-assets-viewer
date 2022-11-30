@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
-// Written by Forge Partner Development
+// Written by Developer Advocate and Support
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted,
@@ -41,7 +41,7 @@ namespace bim360assets.Controllers
         private const string BASE_URL = "https://developer.api.autodesk.com";
 
         [HttpGet]
-        [Route("api/forge/bim360/container")]
+        [Route("api/aps/bim360/container")]
         public async Task<dynamic> GetContainerAsync(string href)
         {
             string[] idParams = href.Split('/');
@@ -61,7 +61,7 @@ namespace bim360assets.Controllers
         private async Task<IRestResponse> GetUsers(string accountId)
         {
             TwoLeggedApi oauth = new TwoLeggedApi();
-            dynamic bearer = await oauth.AuthenticateAsync(Credentials.GetAppSetting("FORGE_CLIENT_ID"), Credentials.GetAppSetting("FORGE_CLIENT_SECRET"), "client_credentials", new Scope[] { Scope.AccountRead });
+            dynamic bearer = await oauth.AuthenticateAsync(Credentials.GetAppSetting("APS_CLIENT_ID"), Credentials.GetAppSetting("APS_CLIENT_SECRET"), "client_credentials", new Scope[] { Scope.AccountRead });
 
             RestClient client = new RestClient(BASE_URL);
             RestRequest request = new RestRequest("/hq/v1/accounts/{account_id}/users", RestSharp.Method.GET);
@@ -71,7 +71,7 @@ namespace bim360assets.Controllers
         }
 
         [HttpGet]
-        [Route("api/forge/bim360/hq/project")]
+        [Route("api/aps/bim360/hq/project")]
         public IActionResult GetHqProjectAsync(string href)
         {
             string[] idParams = href.Split('/');
@@ -82,7 +82,7 @@ namespace bim360assets.Controllers
         }
 
         [HttpGet]
-        [Route("api/forge/bim360/account/{accountId}/project/{projectId}/users")]
+        [Route("api/aps/bim360/account/{accountId}/project/{projectId}/users")]
         public async Task<IActionResult> GetBIM360ProjectUsersAsync(string accountId, [FromQuery] Nullable<int> pageOffset = null, [FromQuery] Nullable<int> pageLimit = null)
         {
             IRestResponse usersResponse = await GetUsers(accountId/*, pageOffset, pageLimit*/);
@@ -93,7 +93,7 @@ namespace bim360assets.Controllers
         private async Task<IRestResponse> GetProjectUsers(string accountId, string projectId, Nullable<int> pageOffset = null, Nullable<int> pageLimit = null)
         {
             TwoLeggedApi oauth = new TwoLeggedApi();
-            dynamic bearer = await oauth.AuthenticateAsync(Credentials.GetAppSetting("FORGE_CLIENT_ID"), Credentials.GetAppSetting("FORGE_CLIENT_SECRET"), "client_credentials", new Scope[] { Scope.AccountRead });
+            dynamic bearer = await oauth.AuthenticateAsync(Credentials.GetAppSetting("APS_CLIENT_ID"), Credentials.GetAppSetting("APS_CLIENT_SECRET"), "client_credentials", new Scope[] { Scope.AccountRead });
 
             RestClient client = new RestClient(BASE_URL);
             RestRequest request = new RestRequest("/bim360/admin/v1/projects/{project_id}/users", RestSharp.Method.GET);
@@ -103,7 +103,7 @@ namespace bim360assets.Controllers
         }
 
         [HttpGet]
-        [Route("api/forge/bim360/account/{accountId}/project/{projectId}/assets")]
+        [Route("api/aps/bim360/account/{accountId}/project/{projectId}/assets")]
         public async Task<IActionResult> GetBIM360AssetsAsync(string accountId, string projectId, [FromQuery] string cursorState, [FromQuery] Nullable<int> pageLimit = null)
         {
             IRestResponse assetsResponse = await GetAssetsAsync(projectId, cursorState, pageLimit);
@@ -235,7 +235,7 @@ namespace bim360assets.Controllers
         }
 
         [HttpGet]
-        [Route("api/forge/bim360/account/{accountId}/project/{projectId}/assets/{assetId}")]
+        [Route("api/aps/bim360/account/{accountId}/project/{projectId}/assets/{assetId}")]
         public async Task<IActionResult> GetBIM360AssetByIdAsync(string accountId, string projectId, string assetId, [FromQuery] bool flatten = false)
         {
             //var asset = await GetAssetsByExtIdAsync(projectId, assetId);
@@ -495,7 +495,7 @@ namespace bim360assets.Controllers
         }
 
         [HttpGet]
-        [Route("api/forge/bim360/account/{accountId}/project/{projectId}/asset-custom-attr-defs")]
+        [Route("api/aps/bim360/account/{accountId}/project/{projectId}/asset-custom-attr-defs")]
         public async Task<IActionResult> GetBIM360CustomAttributeDefsAsync(string accountId, string projectId, [FromQuery] string cursorState, [FromQuery] Nullable<int> pageLimit = null)
         {
             var attrDefsResponse = await GetCustomAttributeDefsAsync(projectId.Replace("b.", string.Empty), cursorState, pageLimit);
@@ -526,7 +526,7 @@ namespace bim360assets.Controllers
         }
 
         [HttpGet]
-        [Route("api/forge/bim360/account/{accountId}/project/{projectId}/asset-categories")]
+        [Route("api/aps/bim360/account/{accountId}/project/{projectId}/asset-categories")]
         public async Task<IActionResult> GetBIM360AssetCategoriesAsync(string accountId, string projectId, [FromQuery] string cursorState, [FromQuery] Nullable<int> pageLimit = null, [FromQuery] bool buildTree = false)
         {
             IRestResponse categoriesResponse = await GetAssetCategoriesAsync(projectId.Replace("b.", string.Empty), cursorState, pageLimit);
@@ -566,7 +566,7 @@ namespace bim360assets.Controllers
         }
 
         [HttpGet]
-        [Route("api/forge/bim360/account/{accountId}/project/{projectId}/asset-statuses")]
+        [Route("api/aps/bim360/account/{accountId}/project/{projectId}/asset-statuses")]
         public async Task<IActionResult> GetBIM360AssetStatusesAsync(string accountId, string projectId, [FromQuery] string cursorState, [FromQuery] Nullable<int> pageLimit = null)
         {
             IRestResponse statusesResponse = await GetAssetStatusessAsync(projectId, cursorState, pageLimit);
@@ -597,7 +597,7 @@ namespace bim360assets.Controllers
         }
 
         // [HttpGet]
-        // [Route("api/forge/bim360/account/{accountId}/project/{projectId}/locations")]
+        // [Route("api/aps/bim360/account/{accountId}/project/{projectId}/locations")]
         // public async Task<IActionResult> GetBIM360LocationsAsync(string accountId, string projectId, [FromQuery] bool buildTree = false)
         // {
         //     IRestResponse locsResponse = await GetLocationsAsync(accountId, projectId);

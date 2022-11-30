@@ -1,24 +1,24 @@
-# View BIM 360 Assets
+# BIM 360 Assets Viewer
 
 ![Platforms](https://img.shields.io/badge/platform-Windows|MacOS-lightgray.svg)
 ![.NET](https://img.shields.io/badge/.NET%20Core-3.1-blue.svg)
 [![MIT](https://img.shields.io/badge/License-MIT-blue.svg)](http://opensource.org/licenses/MIT)
 
-[![oAuth2](https://img.shields.io/badge/oAuth2-v1-green.svg)](http://forge.autodesk.com/)
-[![Data-Management](https://img.shields.io/badge/Data%20Management-v1-green.svg)](http://forge.autodesk.com/)
-[![Viewer](https://img.shields.io/badge/Viewer-v7-green.svg)](http://forge.autodesk.com/)
-[![BIM-360-Assets](https://img.shields.io/badge/BIM%20360%20Assets-v1%20beta-green.svg)](http://forge.autodesk.com/)
+[![oAuth2](https://img.shields.io/badge/oAuth2-v1-green.svg)](http://aps.autodesk.com/)
+[![Data-Management](https://img.shields.io/badge/Data%20Management-v1-green.svg)](http://aps.autodesk.com/)
+[![Viewer](https://img.shields.io/badge/Viewer-v7-green.svg)](http://aps.autodesk.com/)
+[![BIM-360-Assets](https://img.shields.io/badge/BIM%20360%20Assets-beta-green.svg)](http://aps.autodesk.com/)
 
-![Advanced](https://img.shields.io/badge/Level-Advanced-red.svg)
+![Basic](https://img.shields.io/badge/Level-Basic-red.svg)
 
 # Description
 
-Demonstrate how to read BIM 360 **Assets** data with Forge Viewer.
+This repository demonstrates how to read BIM 360 **Assets** data with Viewer SDK.
 
-Uses [Data Management](https://forge.autodesk.com/en/docs/data/v2) to list hubs, projects and files. Uses [Viewer](https://forge.autodesk.com/en/docs/viewer/v6/overview/) to show models and extensions to create toolbar buttons and panels. The sample implements the following features in the **BIM360AssetExtension.js**:
+Uses [Data Management](https://aps.autodesk.com/en/docs/data/v2) to list hubs, projects and files. Uses [Viewer](https://aps.autodesk.com/en/docs/viewer/v6/overview/) to show models and extensions to create toolbar buttons and panels. The sample implements the following features in the **BIM360AssetExtension.js**:
 
-- **BIM360AssetListPanel**: Lists [BIM 360](https://forge.autodesk.com/en/docs/bim360/v1/overview/) Assets on a data table with pagination support on the panel
-- **BIM360AssetInfoPanel**: Display asset data of selected object from [BIM 360](https://forge.autodesk.com/en/docs/bim360/v1/overview/) Assets module.
+- **BIM360AssetListPanel**: Lists [BIM 360](https://aps.autodesk.com/en/docs/bim360/v1/overview/) Assets on a data table with pagination support on the panel
+- **BIM360AssetInfoPanel**: Display asset data of selected object from [BIM 360](https://aps.autodesk.com/en/docs/bim360/v1/overview/) Assets module.
 - **BIM360SpaceFilterPanel**: Lists levels and rooms of the RVT model in a tree hierarchy, and it can apply proper section box (filter) to the model upon checked level or room to bring better view for assets.
 
 ## Thumbnail
@@ -35,7 +35,7 @@ This picture shows similar functionalities as the above one does, but the view a
 
 Here is the video demonstrating how this sample works quickly. First, it shows data of BIM360 Assets on the BIM360 Web UI, then go to the viewer sample to open `BIM360AssetListPanel`, `BIM360AssetInfoPanel` and `BIM360SpaceFilterPanel` sequentially, and data shown on the `BIM360AssetListPanel` is the same as we see on the BIM360 Web UI.
 
-[![](http://img.youtube.com/vi/aNLFpVgeOVc/0.jpg)](http://www.youtube.com/watch?v=aNLFpVgeOVc "Demo the possibility of BIM360 Assets API & Forge Viewer Integration")
+[![](http://img.youtube.com/vi/aNLFpVgeOVc/0.jpg)](http://www.youtube.com/watch?v=aNLFpVgeOVc "Demo the possibility of BIM360 Assets API & Viewer SDK Integration")
 
 [Click here or click on the above picture to view the video](http://www.youtube.com/watch?v=aNLFpVgeOVc)
 
@@ -47,7 +47,7 @@ Here is the video demonstrating how this sample works quickly. First, it shows d
 
 - The BIM360 [Locations](https://help.autodesk.com/view/BIM360D/ENU/?guid=BIM360D_Administration_About_Project_Admin_about_location_html) API is not yet publicly released yet (still in private beta currently), so you will need to set up extra properties in the Revit model. Please check [Import sample data](#import-sample-data) for the detail instructions.
 
-- This sample support models of Revit 2018 and later only due to the supports of the [AecModelData](https://forge.autodesk.com/blog/consume-aec-data-which-are-model-derivative-api) and [Master views](https://forge.autodesk.com/blog/new-rvt-svf-model-derivative-parameter-generates-additional-content-including-rooms-and-spaces).
+- This sample support models of Revit 2018 and later only due to the supports of the [AecModelData](https://aps.autodesk.com/blog/consume-aec-data-which-are-model-derivative-api) and [Master views](https://aps.autodesk.com/blog/new-rvt-svf-model-derivative-parameter-generates-additional-content-including-rooms-and-spaces).
 
 ## Live version
 
@@ -57,8 +57,8 @@ Here is the video demonstrating how this sample works quickly. First, it shows d
 
 ## Prerequisites
 
-1. **BIM 360 Account**: must be Account Admin to add the app integration. [Learn about provisioning](https://forge.autodesk.com/blog/bim-360-docs-provisioning-forge-apps).
-2. **Forge Account**: Learn how to create a Forge Account, activate subscription and create an app at [this tutorial](http://learnforge.autodesk.io/#/account/). 
+1. **APS Account**: Learn how to create a APS Account, activate your subscription, and create an app at [this tutorial](http://aps.autodesk.com/tutorials/#/account/).
+2. **BIM 360 Account**: must be Account Admin to add the app integration. [Learn about provisioning](https://aps.autodesk.com/en/docs/bim360/v1/tutorials/getting-started/manage-access-to-docs/).
 3. **Visual Studio**: Either Community 2017+ (Windows) or Code (Windows, MacOS).
 4. **.NET Core** basic knowledge with C#
 5. **JavaScript** basic knowledge with **jQuery**
@@ -123,29 +123,29 @@ Follow the following steps to set up your BIM360 Assets module to run this viewe
 
 Clone this project or download it. It's recommended to install [GitHub desktop](https://desktop.github.com/). To clone it via command line, use the following (**Terminal** on MacOSX/Linux, **Git Shell** on Windows):
 
-    git clone https://github.com/autodesk-forge/forge-bim360-assets.viewer
+    git clone https://github.com/autodesk-platform-services/aps-bim360-assets-viewer
 
 **Visual Studio** (Windows):
 
 Right-click on the project, then go to **Debug**. Adjust the settings as shown below.
 
-![](bim360assets/wwwroot/img/readme/visual_studio_settings.png) 
+![](.readme/visual_studio_settings.png) 
 
 **Visual Studio Code** (Windows, MacOS):
 
-Open the folder, at the bottom-right, select **Yes** and **Restore**. This restores the packages (e.g. Autodesk.Forge) and creates the launch.json file. See *Tips & Tricks* for .NET Core on MacOS.
+Open the folder, at the bottom-right, select **Yes** and **Restore**. This restores the packages and creates the launch.json file. See *Tips & Tricks* for .NET Core on MacOS.
 
-![](bim360assets/wwwroot/img/readme/visual_code_restore.png)
+![](.readme/visual_code_restore.png)
 
-At the `.vscode\launch.json`, find the env vars and add your Forge Client ID, Secret and callback URL. Also define the `ASPNETCORE_URLS` variable. The end result should be as shown below:
+At the `.vscode\launch.json`, find the env vars and add your APS Client ID, Secret and callback URL. Also define the `ASPNETCORE_URLS` variable. The end result should be as shown below:
 
 ```json
 "env": {
     "ASPNETCORE_ENVIRONMENT": "Development",
     "ASPNETCORE_URLS" : "http://localhost:3000",
-    "FORGE_CLIENT_ID": "your id here",
-    "FORGE_CLIENT_SECRET": "your secret here",
-    "FORGE_CALLBACK_URL": "http://localhost:3000/api/forge/callback/oauth",
+    "APS_CLIENT_ID": "your id here",
+    "APS_CLIENT_SECRET": "your secret here",
+    "APS_CALLBACK_URL": "http://localhost:3000/api/aps/callback/oauth",
 },
 ```
 
@@ -153,7 +153,7 @@ Run the app. Open `http://localhost:3000` to view your files. It may be required
 
 ## Deployment
 
-To deploy this application to Heroku, the **Callback URL** for Forge must use your `.herokuapp.com` address. After clicking on the button below, at the Heroku Create New App page, set your Client ID, Secret and Callback URL for Forge.
+To deploy this application to Heroku, the **Callback URL** for APS must use your `.herokuapp.com` address. After clicking on the button below, at the Heroku Create New App page, set your Client ID, Secret and Callback URL for APS.
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
@@ -163,27 +163,27 @@ Watch [this video](https://www.youtube.com/watch?v=Oqa9O20Gj0c) on how deploy sa
 
 Documentation:
 
-- [BIM 360 Assets API Field Guide](https://forge.autodesk.com/en/docs/bim360/v1/overview/field-guide/assets/)
-- [BIM 360 API](https://forge.autodesk.com/en/docs/bim360/v1/overview/) and [App Provisioning](https://forge.autodesk.com/blog/bim-360-docs-provisioning-forge-apps)
-- [Data Management API](https://forge.autodesk.com/en/docs/data/v2/overview/)
-- [Viewer](https://forge.autodesk.com/en/docs/viewer/v7)
+- [BIM 360 Assets API Field Guide](https://aps.autodesk.com/en/docs/bim360/v1/overview/field-guide/assets/)
+- [BIM 360 API](https://aps.autodesk.com/en/docs/bim360/v1/overview/) and [App Provisioning](https://aps.autodesk.com/blog/bim-360-docs-provisioning-aps-apps)
+- [Data Management API](https://aps.autodesk.com/en/docs/data/v2/overview/)
+- [Viewer](https://aps.autodesk.com/en/docs/viewer/v7)
 
 Tutorials:
 
-- [Setup BIM 360 Assets Project Settings](https://forge.autodesk.com/en/docs/bim360/v1/tutorials/assets/create-assets-project-settings/)
-- [Retrieve BIM 360 Assets Data](https://forge.autodesk.com/en/docs/bim360/v1/tutorials/assets/retrieve-assets-data/)
-- [Learn Forge - View BIM 360 Models](http://learnforge.autodesk.io/#/tutorials/viewhubmodels)
+- [Setup BIM 360 Assets Project Settings](https://aps.autodesk.com/en/docs/bim360/v1/tutorials/assets/create-assets-project-settings/)
+- [Retrieve BIM 360 Assets Data](https://aps.autodesk.com/en/docs/bim360/v1/tutorials/assets/retrieve-assets-data/)
+- [Learn APS - View BIM 360 Models](http://aps.autodesk.com/tutorials/#/tutorials/viewhubmodels)
 
 Blogs:
 
-- [Forge Blog](https://forge.autodesk.com/categories/bim-360-api)
+- [APS Blog](https://aps.autodesk.com/categories/bim-360-api)
 - [Field of View](https://fieldofviewblog.wordpress.com/), a BIM focused blog
 
 Related samples:
 
 - Checkout these awesome samples to import/extort assets configurations while following [Work with your models](#work-with-your-models) to import assets data:
-    - [forge-bim360.asset.exchange.excel](https://github.com/xiaodongliang/forge-bim360.asset.exchange.excel)
-    - [forge-revit.extract.assert-bim360](https://github.com/JohnOnSoftware/forge-revit.extract.assert-bim360)
+    - [aps-bim360.asset.exchange.excel](https://github.com/Autodesk-Forge/forge-bim360.asset.exchange.excel)
+    - [aps-revit.extract.assert-bim360](https://github.com/Autodesk-Forge/forge-revit.extract.assets-bim360)
 
 ### Tips & Tricks
 
@@ -191,25 +191,25 @@ This sample uses .NET Core and works fine on both Windows and MacOS, see [this t
 
 ### Troubleshooting
 
-1. **Cannot see my BIM 360 projects**: Make sure to provision the Forge App Client ID within the BIM 360 Account, [learn more here](https://forge.autodesk.com/blog/bim-360-docs-provisioning-forge-apps). This requires the Account Admin permission.
+1. **Cannot see my BIM 360 projects**: Make sure to provision the APS App Client ID within the BIM 360 Account, [learn more here](https://aps.autodesk.com/blog/bim-360-docs-provisioning-aps-apps). This requires the Account Admin permission.
 
 2. **Error setting certificate verify locations** error: may happen on Windows, use the following: `git config --global http.sslverify "false"`
 
 3. **Enable SVF2 Support** : You must use viewer **v7.36 & newer versions** to support loading hidden fragments (e.g., Rooms) in SVF2, then change codes as below:
 
-    - Change viewer's env and api to `env: 'MD20Prod'` and `api: 'D3S'` like below in [bim360assets/wwwroot/js/ForgeViewer.js#L31](bim360assets/wwwroot/js/ForgeViewer.js#L31)
+    - Change viewer's env and api to `env: 'MD20Prod'` and `api: 'D3S'` like below in [bim360assets/wwwroot/js/APSViewer.js#L31](bim360assets/wwwroot/js/APSViewer.js#L31)
         ```javascript
         var options = {
             //env: 'AutodeskProduction',
             //api: 'derivativeV2' + (atob(urn.replace('_', '/')).indexOf('emea') > -1 ? '_EU' : ''),
-            env: 'MD20Prod' + (atob(urn.replace('urn:', '').replace('_', '/')).indexOf('emea') > -1 ? 'EU' : 'US'),
-            api: 'D3S',
-            getAccessToken: getForgeToken
+            env: 'AutodeskProduction2',
+            api: 'streamingV2' + (atob(urn.replace('urn:', '').replace('_', '/')).indexOf('emea') > -1 ? '_EU' : ''),
+            getAccessToken: getAPSToken
         };
         ```
-    - Ensure `skipHiddenFragments: false` is added to the options of [Viewer3D#loadDocumentNode](https://forge.autodesk.com/en/docs/viewer/v7/reference/Viewing/Viewer3D/#loaddocumentnode-avdocument-manifestnode-options) in [bim360assets/wwwroot/js/BIM360AssetExtension.js#L1637](bim360assets/wwwroot/js/BIM360AssetExtension.js#L1637)
+    - Ensure `skipHiddenFragments: false` is added to the options of [Viewer3D#loadDocumentNode](https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/Viewer3D/#loaddocumentnode-avdocument-manifestnode-options) in [bim360assets/wwwroot/js/BIM360AssetExtension.js#L1637](bim360assets/wwwroot/js/BIM360AssetExtension.js#L1637)
         ```javascript
-        this.roomModel = await this.viewer.loadDocumentNode(
+        this.viewer.loadDocumentNode(
             doc,
             masterViewBubble,
             {
@@ -228,4 +228,4 @@ This sample is licensed under the terms of the [MIT License](http://opensource.o
 
 ## Written by
 
-Eason Kang [@yiskang](https://twitter.com/yiskang), [Forge Partner Development](http://forge.autodesk.com)
+Eason Kang [@yiskang](https://twitter.com/yiskang), [Developer Advocate and Support](http://aps.autodesk.com)

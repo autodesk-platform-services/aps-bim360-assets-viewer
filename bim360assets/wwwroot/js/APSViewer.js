@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
-// Written by Forge Partner Development
+// Written by Developer Advocate and Support
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted,
@@ -23,21 +23,21 @@ function launchViewer(urn, viewableId) {
     viewer.tearDown()
     viewer.finish()
     viewer = null
-    $("#forgeViewer").empty();
+    $("#apsViewer").empty();
   }
   var options = {
     env: 'AutodeskProduction',
     api: 'derivativeV2' + (atob(urn.replace('_', '/')).indexOf('emea') > -1 ? '_EU' : ''),
-    //env: 'MD20Prod' + (atob(urn.replace('urn:', '').replace('_', '/')).indexOf('emea') > -1 ? 'EU' : 'US'),
-    //api: 'D3S',
-    getAccessToken: getForgeToken
+    // env: 'AutodeskProduction2',
+    // api: 'streamingV2' + (atob(urn.replace('urn:', '').replace('_', '/')).indexOf('emea') > -1 ? '_EU' : ''),
+    getAccessToken: getApsToken
   };
 
   Autodesk.Viewing.Initializer(options, () => {
     const config3d = {
       extensions: ['BIM360AssetExtension']
     };
-    viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), config3d);
+    viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('apsViewer'), config3d);
     viewer.start();
     var documentId = 'urn:' + urn;
     Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
@@ -57,9 +57,9 @@ function launchViewer(urn, viewableId) {
 
 
 
-function getForgeToken(callback) {
+function getApsToken(callback) {
   jQuery.ajax({
-    url: '/api/forge/oauth/token',
+    url: '/api/aps/oauth/token',
     success: function (res) {
       callback(res.access_token, res.expires_in)
     }

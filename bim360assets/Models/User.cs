@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
-// Written by Forge Partner Development
+// Written by Developer Advocate and Support
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted,
@@ -115,7 +115,7 @@ namespace bim360assets.Models
         public string PostalCode { get; set; }
         /// <summary>
         /// Country for this user
-        /// Refer to the <b>country</b> list in the <a href="https://forge.autodesk.com/en/docs/bim360/v1/overview/parameters">Parameters</a> guide.
+        /// Refer to the <b>country</b> list in the <a href="https://aps.autodesk.com/en/docs/bim360/v1/overview/parameters">Parameters</a> guide.
         /// </summary>
         public string Country { get; set; }
         /// <summary>

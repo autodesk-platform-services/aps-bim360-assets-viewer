@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
-// Written by Forge Partner Development
+// Written by Developer Advocate and Support
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted,
@@ -53,7 +53,7 @@ namespace bim360assets.Controllers
         }
 
         [HttpGet]
-        [Route("api/forge/bim360/account/{accountId}/container/{containerId}/issues/{urn}")]
+        [Route("api/aps/bim360/account/{accountId}/container/{containerId}/issues/{urn}")]
         public async Task<JArray> GetDocumentIssuesAsync(string accountId, string containerId, string urn)
         {
             IRestResponse documentIssuesResponse = await GetIssuesAsync(containerId, "quality-issues", urn);
@@ -106,7 +106,7 @@ namespace bim360assets.Controllers
 
 
         [HttpPost]
-        [Route("api/forge/bim360/container/{containerId}/issues/{urn}")]
+        [Route("api/aps/bim360/container/{containerId}/issues/{urn}")]
         public async Task<IActionResult> CreateDocumentIssuesAsync(string containerId, string urn, [FromBody] JObject data)
         {
             // for this sample, let's create Design issues

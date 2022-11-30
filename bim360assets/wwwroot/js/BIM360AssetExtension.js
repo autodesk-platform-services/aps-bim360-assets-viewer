@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
-// Written by Forge Partner Development
+// Written by Developer Advocate and Support
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted,
@@ -231,7 +231,7 @@
 
         async getHqProjectId(href) {
             return new Promise(async (resolve, reject) => {
-                fetch(`/api/forge/bim360/hq/project?href=${href}`, {
+                fetch(`/api/aps/bim360/hq/project?href=${href}`, {
                     method: 'get',
                     headers: new Headers({ 'Content-Type': 'application/json' })
                 })
@@ -274,7 +274,7 @@
 
         async getRemoteUsers(accountId, projectId) {
             return new Promise((resolve, reject) => {
-                fetch(`/api/forge/bim360/account/${accountId}/project/${projectId}/users`, {
+                fetch(`/api/aps/bim360/account/${accountId}/project/${projectId}/users`, {
                     method: 'get',
                     headers: new Headers({ 'Content-Type': 'application/json' })
                 })
@@ -366,7 +366,7 @@
 
         async getRemoteAssetCategories(accountId, projectId) {
             return new Promise((resolve, reject) => {
-                fetch(`/api/forge/bim360/account/${accountId}/project/${projectId}/asset-categories?buildTree=true`, {
+                fetch(`/api/aps/bim360/account/${accountId}/project/${projectId}/asset-categories?buildTree=true`, {
                     method: 'get',
                     headers: new Headers({ 'Content-Type': 'application/json' })
                 })
@@ -413,7 +413,7 @@
 
         async getRemoteAssetStatuses(accountId, projectId) {
             return new Promise((resolve, reject) => {
-                fetch(`/api/forge/bim360/account/${accountId}/project/${projectId}/asset-statuses`, {
+                fetch(`/api/aps/bim360/account/${accountId}/project/${projectId}/asset-statuses`, {
                     method: 'get',
                     headers: new Headers({ 'Content-Type': 'application/json' })
                 })
@@ -476,7 +476,7 @@
 
         async getRemoteLocations(accountId, projectId) {
             return new Promise((resolve, reject) => {
-                fetch(`/api/forge/bim360/account/${accountId}/project/${projectId}/locations?buildTree=true`, {
+                fetch(`/api/aps/bim360/account/${accountId}/project/${projectId}/locations?buildTree=true`, {
                     method: 'get',
                     headers: new Headers({ 'Content-Type': 'application/json' })
                 })
@@ -520,7 +520,7 @@
 
         async getRemoteAssetCustomAttributeDefs(accountId, projectId) {
             return new Promise((resolve, reject) => {
-                fetch(`/api/forge/bim360/account/${accountId}/project/${projectId}/asset-custom-attr-defs`, {
+                fetch(`/api/aps/bim360/account/${accountId}/project/${projectId}/asset-custom-attr-defs`, {
                     method: 'get',
                     headers: new Headers({ 'Content-Type': 'application/json' })
                 })
@@ -661,7 +661,7 @@
 
         async getRemoteAssetInfo(accountId, projectId, assetId) {
             return new Promise((resolve, reject) => {
-                fetch(`/api/forge/bim360/account/${accountId}/project/${projectId}/assets/${assetId}`, {
+                fetch(`/api/aps/bim360/account/${accountId}/project/${projectId}/assets/${assetId}`, {
                     method: 'get',
                     headers: new Headers({
                         'Content-Type': 'application/json'
@@ -719,7 +719,7 @@
                     query += `&cursorState=${cursorState}`
                 }
 
-                fetch(`/api/forge/bim360/account/${accountId}/project/${projectId}/assets?${query}`, {
+                fetch(`/api/aps/bim360/account/${accountId}/project/${projectId}/assets?${query}`, {
                     method: 'get',
                     headers: new Headers({ 'Content-Type': 'application/json' })
                 })
