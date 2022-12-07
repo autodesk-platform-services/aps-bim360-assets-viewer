@@ -45,13 +45,13 @@ Here is the video demonstrating how this sample works quickly. First, it shows d
 
 ## Limitation
 
-- The BIM360 [Locations](https://help.autodesk.com/view/BIM360D/ENU/?guid=BIM360D_Administration_About_Project_Admin_about_location_html) API is not yet publicly released yet (still in private beta currently), so you will need to set up extra properties in the Revit model. Please check [Import sample data](#import-sample-data) for the detail instructions.
+- The BIM360 [Locations](https://help.autodesk.com/view/BIM360D/ENU/?guid=BIM360D_Administration_About_Project_Admin_about_location_html) API is read-only, so you will need to set up extra properties in the Revit model. Please check [Import sample data](#import-sample-data) for the detail instructions. However, [ACC Locations API](https://aps.autodesk.com/en/docs/acc/v1/overview/field-guide/locations/) supports both read and write. If you run this sample with ACC projects, you can 
 
 - This sample support models of Revit 2018 and later only due to the supports of the [AecModelData](https://aps.autodesk.com/blog/consume-aec-data-which-are-model-derivative-api) and [Master views](https://aps.autodesk.com/blog/new-rvt-svf-model-derivative-parameter-generates-additional-content-including-rooms-and-spaces).
 
 ## Live version
 
-[bim360assets.herokuapp.com](https://bim360assets.herokuapp.com/), and follow instructions of the [Work with the sample model](#work-with-the-sample-model) to import up sample data.
+[aps-assets-viewer.autodesk.io](https://aps-assets-viewer.autodesk.io/), and follow instructions of the [Work with the sample model](#work-with-the-sample-model) to import up sample data.
 
 # Setup
 
@@ -164,15 +164,15 @@ Watch [this video](https://www.youtube.com/watch?v=Oqa9O20Gj0c) on how deploy sa
 Documentation:
 
 - [BIM 360 Assets API Field Guide](https://aps.autodesk.com/en/docs/bim360/v1/overview/field-guide/assets/)
-- [BIM 360 API](https://aps.autodesk.com/en/docs/bim360/v1/overview/) and [App Provisioning](https://aps.autodesk.com/blog/bim-360-docs-provisioning-aps-apps)
+- [BIM 360 API](https://aps.autodesk.com/en/docs/bim360/v1/overview/) and [App Provisioning](https://aps.autodesk.com/en/docs/bim360/v1/tutorials/getting-started/manage-access-to-docs/)
 - [Data Management API](https://aps.autodesk.com/en/docs/data/v2/overview/)
-- [Viewer](https://aps.autodesk.com/en/docs/viewer/v7)
+- [Viewer SDK](https://aps.autodesk.com/en/docs/viewer/v7)
 
 Tutorials:
 
 - [Setup BIM 360 Assets Project Settings](https://aps.autodesk.com/en/docs/bim360/v1/tutorials/assets/create-assets-project-settings/)
 - [Retrieve BIM 360 Assets Data](https://aps.autodesk.com/en/docs/bim360/v1/tutorials/assets/retrieve-assets-data/)
-- [Learn APS - View BIM 360 Models](http://aps.autodesk.com/tutorials/#/tutorials/viewhubmodels)
+- [Learn APS - Hubs Browser](https://tutorials.autodesk.io/tutorials/hubs-browser/)
 
 Blogs:
 
@@ -182,8 +182,8 @@ Blogs:
 Related samples:
 
 - Checkout these awesome samples to import/extort assets configurations while following [Work with your models](#work-with-your-models) to import assets data:
-    - [aps-bim360.asset.exchange.excel](https://github.com/Autodesk-Forge/forge-bim360.asset.exchange.excel)
-    - [aps-revit.extract.assert-bim360](https://github.com/Autodesk-Forge/forge-revit.extract.assets-bim360)
+    - [aps-assets-exchange-excel](https://github.com/autodesk-platform-services/aps-assets-exchange-excel)
+    <!-- - [aps-revit.extract.assert-bim360](https://github.com/Autodesk-Forge/forge-revit.extract.assets-bim360) -->
 
 ### Tips & Tricks
 
@@ -191,13 +191,13 @@ This sample uses .NET Core and works fine on both Windows and MacOS, see [this t
 
 ### Troubleshooting
 
-1. **Cannot see my BIM 360 projects**: Make sure to provision the APS App Client ID within the BIM 360 Account, [learn more here](https://aps.autodesk.com/blog/bim-360-docs-provisioning-aps-apps). This requires the Account Admin permission.
+1. **Cannot see my BIM 360 projects**: Make sure to provision the APS App Client ID within the BIM 360 Account, [learn more here](https://aps.autodesk.com/en/docs/bim360/v1/tutorials/getting-started/manage-access-to-docs/). This requires the Account Admin permission.
 
 2. **Error setting certificate verify locations** error: may happen on Windows, use the following: `git config --global http.sslverify "false"`
 
 3. **Enable SVF2 Support** : You must use viewer **v7.36 & newer versions** to support loading hidden fragments (e.g., Rooms) in SVF2, then change codes as below:
 
-    - Change viewer's env and api to `env: 'MD20Prod'` and `api: 'D3S'` like below in [bim360assets/wwwroot/js/APSViewer.js#L31](bim360assets/wwwroot/js/APSViewer.js#L31)
+    - Change viewer's env and api to `env: 'AutodeskProduction2'` and `api: 'streamingV2'` like below in [bim360assets/wwwroot/js/APSViewer.js#L31](bim360assets/wwwroot/js/APSViewer.js#L31)
         ```javascript
         var options = {
             //env: 'AutodeskProduction',
