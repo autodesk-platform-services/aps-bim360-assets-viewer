@@ -45,7 +45,7 @@ Here is the video demonstrating how this sample works quickly. First, it shows d
 
 ## Limitation
 
-- The BIM360 [Locations](https://help.autodesk.com/view/BIM360D/ENU/?guid=BIM360D_Administration_About_Project_Admin_about_location_html) API is read-only, so you will need to set up extra properties in the Revit model. Please check [Import sample data](#import-sample-data) for the detail instructions. However, [ACC Locations API](https://aps.autodesk.com/en/docs/acc/v1/overview/field-guide/locations/) supports both read and write. If you run this sample with ACC projects, you can 
+- The BIM360 [Locations](https://help.autodesk.com/view/BIM360D/ENU/?guid=BIM360D_Administration_About_Project_Admin_about_location_html) API is read-only, so you will need to set up extra properties in the Revit model. Please check [Import sample data](#import-sample-data) for the detail instructions. However, [ACC Locations API](https://aps.autodesk.com/en/docs/acc/v1/overview/field-guide/locations/) supports both read and write. If you run this sample with ACC projects, you can create nodes by API.
 
 - This sample support models of Revit 2018 and later only due to the supports of the [AecModelData](https://aps.autodesk.com/blog/consume-aec-data-which-are-model-derivative-api) and [Master views](https://aps.autodesk.com/blog/new-rvt-svf-model-derivative-parameter-generates-additional-content-including-rooms-and-spaces).
 
