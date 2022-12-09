@@ -619,6 +619,7 @@
 
                 if (attrName === 'customAttributes') {
                     let flattenCustomAttrs = this.flatCustomAttributes(attrVal);
+                    flattenCustomAttrs.sort((a, b) => a.displayName.localeCompare(b.displayName));
                     props.push(...flattenCustomAttrs);
                     continue;
                 }
@@ -1160,6 +1161,18 @@
             this.setTitle('Unknown Asset', { localizeTitle: true });
             this.showNoProperties();
             this.resizeToContent();
+        }
+
+        requestProperties() {
+            if (this.isVisible() && this.isDirty) {
+
+                if (this.currentModel != null && this.currentNodeIds.length > 0) {
+                    this.requestNodeProperties(this.currentNodeIds[0]);
+                } else {
+                    this.showDefaultProperties();
+                }
+                this.isDirty = false;
+            }
         }
 
         async requestNodeProperties(dbId) {
