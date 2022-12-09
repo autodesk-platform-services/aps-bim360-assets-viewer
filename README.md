@@ -25,11 +25,11 @@ Uses [Data Management](https://aps.autodesk.com/en/docs/data/v2) to list hubs, p
 
 This picture shows the functionalities of the `BIM360AssetExtension` from left-bottom side to right side accordingly are `BIM360SpaceFilterPanel`, `BIM360AssetListPanel` and `BIM360AssetInfoPanel`. The view is activating the level filter (sectioning) of the `BIM360SpaceFilterPanel` and showing the selected air terminal's asset info from the BIM360 Assets service by `BIM360AssetInfoPanel`.
 
-![thumbnail](/thumbnail.png)
+![thumbnail](./thumbnail.png)
 
 This picture shows similar functionalities as the above one does, but the view activates the room filter of the `BIM360SpaceFilterPanel` where the selected air terminal is located instead.
 
-![thumbnail-2](/thumbnail-2.png)
+![thumbnail-2](./thumbnail-2.png)
 
 ## Demonstration
 
