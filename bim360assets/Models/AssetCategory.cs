@@ -78,7 +78,7 @@ namespace bim360assets.Models
         /// <summary>
         /// The list of child Category
         /// </summary>
-        public List<AssetCategory> Subcategories { get; set; }        
+        public List<AssetCategory> Subcategories { get; set; }
 
         public static List<AssetCategory> BuildTree(List<AssetCategory> list, string parentId)
         {

@@ -370,7 +370,7 @@ namespace bim360assets.Controllers
             return properties;
         }
 
-        private async Task<Asset> GetAssetsBySearchTextAsync(string projectId, string text) 
+        private async Task<Asset> GetAssetsBySearchTextAsync(string projectId, string text)
         {
             Credentials credentials = await Credentials.FromSessionAsync(base.Request.Cookies, Response.Cookies);
             if (credentials == null)
@@ -394,7 +394,7 @@ namespace bim360assets.Controllers
             return assets.Results.FirstOrDefault();
         }
 
-        private async Task<Asset> GetAssetsByExtIdAsync(string projectId, string id) 
+        private async Task<Asset> GetAssetsByExtIdAsync(string projectId, string id)
         {
             Credentials credentials = await Credentials.FromSessionAsync(base.Request.Cookies, Response.Cookies);
             if (credentials == null)
@@ -407,7 +407,7 @@ namespace bim360assets.Controllers
             var attrDefMapping = attrDefs.Results.ToDictionary(d => d.DisplayName, d => d);
             var extIdAttr = attrDefs.Results.First(attr => attr.DisplayName.ToLower().Contains("External Id".ToLower()));
 
-            if(extIdAttr == null)
+            if (extIdAttr == null)
             {
                 throw new InvalidOperationException("Failed to get CustomAttribute called `External Id`");
             }

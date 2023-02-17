@@ -33,6 +33,6 @@ namespace bim360assets.Models
         public int Hidden { get; set; } = 0;
         public int Precision { get; set; } = 0;
         public int Type { get; set; }
-        public string Units  { get; set; }
+        public string Units { get; set; }
     }
 }

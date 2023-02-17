@@ -15,7 +15,8 @@
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/themes/default-dark/style.min.css" />
   <script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.6.0/clipboard.min.js"></script>
   <!-- Autodesk APS Viewer files -->
-  <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.min.css" type="text/css">
+  <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.min.css"
+    type="text/css">
   <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js"></script>
   <!-- this project files -->
   <link href="css/main.css" rel="stylesheet" />
@@ -36,8 +37,9 @@
         </li>
       </ul>
       <div style="float: right; margin-top: 15px;">
-        <span style="padding-right: 5px;" data-toggle="modal" data-target="#provisionAccountModal" title="Enable my BIM 360 Account"><span
-            class="glyphicon glyphicon-cog glyphiconTop mlink"> </span> Enable my BIM 360 Account</span>
+        <span style="padding-right: 5px;" data-toggle="modal" data-target="#provisionAccountModal"
+          title="Enable my BIM 360 Account"><span class="glyphicon glyphicon-cog glyphiconTop mlink"> </span> Enable my
+          BIM 360 Account</span>
       </div>
     </div>
   </nav>
@@ -48,22 +50,23 @@
         <div class="panel panel-default fill">
           <div class="panel-heading" data-toggle="tooltip" style="padding: 0px;">
             <span id="userInfo"></span>
-            <span id="refreshHubs" class="glyphicon glyphicon-refresh" style="cursor: pointer; display: none" title="Refresh list of files"></span>
-            <span id="signOut" class="glyphicon glyphicon-log-out" style="margin-top:5px;cursor: pointer; float: right; display: none"
-              title="Sign out"> </span>
+            <span id="refreshHubs" class="glyphicon glyphicon-refresh" style="cursor: pointer; display: none"
+              title="Refresh list of files"></span>
+            <span id="signOut" class="glyphicon glyphicon-log-out"
+              style="margin-top:5px;cursor: pointer; float: right; display: none" title="Sign out"> </span>
           </div>
           <div id="userHubs">
             <div style="padding-top: 100px; text-align: center;">
               <button class="btn btn-lg btn-default" id="autodeskSigninButton">
-                <img src="//cdn.autodesk.io/autodesk.png"
-                  height="20"> Sign in
+                <img src="//cdn.autodesk.io/autodesk.png" height="20"> Sign in
               </button>
               <br />
               <br />
               <br /> You may also need to provision your
               <br /> BIM 360 Docs account for this app.
               <br />
-              <a href="https://aps.autodesk.com/en/docs/bim360/v1/tutorials/getting-started/manage-access-to-docs/">Learn more</a>.
+              <a href="https://aps.autodesk.com/en/docs/bim360/v1/tutorials/getting-started/manage-access-to-docs/">Learn
+                more</a>.
             </div>
           </div>
         </div>
@@ -95,14 +98,18 @@
           </p>
           Use this as APS Client ID:
           <div class="input-group">
-            <input type="text" readonly="true" aria-describedby="CopyClientID" id="ClientID" class="form-control" value="" />
-            <span class="input-group-addon" style="cursor: pointer" data-clipboard-target="#ClientID" id="CopyClientID">Copy
+            <input type="text" readonly="true" aria-describedby="CopyClientID" id="ClientID" class="form-control"
+              value="" />
+            <span class="input-group-addon" style="cursor: pointer" data-clipboard-target="#ClientID"
+              id="CopyClientID">Copy
               to clipboard</span>
           </div>
           And this App Name:
           <div class="input-group">
-            <input type="text" readonly="true" aria-describedby="CopyAppName" id="AppName" class="form-control" value="BIM 360 Asset Viewer" />
-            <span class="input-group-addon" style="cursor: pointer" data-clipboard-target="#AppName" id="CopyAppName">Copy
+            <input type="text" readonly="true" aria-describedby="CopyAppName" id="AppName" class="form-control"
+              value="BIM 360 Asset Viewer" />
+            <span class="input-group-addon" style="cursor: pointer" data-clipboard-target="#AppName"
+              id="CopyAppName">Copy
               to clipboard</span>
           </div>
         </div>
@@ -134,8 +141,7 @@
             <li>From the toolbar, select
               <strong>SETTINGS &gt; Apps &amp; Integrations</strong>.
               <br />
-              <img src="https://cdn.autodesk.io/acc/provision/Step1.png"
-                width="500" />
+              <img src="https://cdn.autodesk.io/acc/provision/Step1.png" width="500" />
             </li>
             <li>Click the
               <strong>Add Integration</strong> button.
@@ -149,17 +155,18 @@
             </li>
             <li>Select
               <strong>I’m the developer</strong>, and click
-              <strong>Next</strong>.</li>
+              <strong>Next</strong>.
+            </li>
             <li>In the
               <strong>APS Client ID</strong> and
               <strong>App Name</strong> fields, enter the APS client ID and app name provided by the app retailer.
             </li>
             <li>Select the
-              <strong>I have saved the Account ID information securely</strong> checkbox.</li>
+              <strong>I have saved the Account ID information securely</strong> checkbox.
+            </li>
             <li>Click
               <strong>Save</strong>.<br />
-              <img src="https://cdn.autodesk.io/acc/provision/Step3.png"
-                width="500" />
+              <img src="https://cdn.autodesk.io/acc/provision/Step3.png" width="500" />
             </li>
             <p></p>
             <p>Congratulations! You can now access your BIM 360 Docs files.</p>

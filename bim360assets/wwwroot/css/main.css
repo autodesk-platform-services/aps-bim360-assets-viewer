@@ -1,14 +1,16 @@
-﻿html, body{
+﻿html,
+body {
   min-height: 100%;
   height: 100%;
 }
 
-.fill{
+.fill {
   height: calc(100vh - 100px);
 }
 
 body {
-  padding-top: 60px; /* space for the top nav bar */
+  padding-top: 60px;
+  /* space for the top nav bar */
   margin-right: 30px;
 }
 
@@ -42,7 +44,7 @@ body {
 }
 
 .bim360-asset-list-panel {
-  background: rgba(34,34,34,.9) !important;
+  background: rgba(34, 34, 34, .9) !important;
   max-height: 750px;
   max-width: 200px;
   width: 750px;
@@ -70,23 +72,27 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .bim360-asset-list-panel .datatable .clusterize-content td:nth-child(1) {
   min-width: 65px;
 }
+
 .bim360-asset-list-panel .datatable .clusterize-content td:nth-child(2),
-  .bim360-asset-list-panel .datatable .clusterize-content td:nth-child(3) {
+.bim360-asset-list-panel .datatable .clusterize-content td:nth-child(3) {
   /* min-width: 61px; */
   max-width: 250px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 /* .bim360-asset-list-panel .datatable .clusterize-content td:nth-child(3) {
   min-width: 297px;
 } */
 .bim360-asset-list-panel .datatable .clusterize-content td:nth-child(4) {
   min-width: 92px;
 }
+
 .bim360-asset-list-panel .datatable .clusterize-content td:nth-child(5) {
   min-width: 43px;
 }
@@ -99,12 +105,13 @@ body {
   background-color: #4a4747 !important;
 } */
 
-.bim360-asset-list-panel .datatable .table-striped>tbody>tr:nth-child(odd)>td, .adsk-viewing-viewer .datatable .table-striped>tbody>tr:nth-child(odd)>th {
+.bim360-asset-list-panel .datatable .table-striped>tbody>tr:nth-child(odd)>td,
+.adsk-viewing-viewer .datatable .table-striped>tbody>tr:nth-child(odd)>th {
   background-color: transparent;
 }
 
 .bim360-asset-list-panel .datatable .table-striped tr:hover:not(.active) {
-  background: rgba(0,0,0,.4)!important;
+  background: rgba(0, 0, 0, .4) !important;
 }
 
 .bim360-asset-list-panel .datatable .table-striped tr.active {
@@ -133,7 +140,7 @@ body {
 } */
 
 /* omit tr color from bootstrap */
-.table-striped > tbody > tr:nth-of-type(2n+1) {
+.table-striped>tbody>tr:nth-of-type(2n+1) {
   background-color: transparent;
 }
 

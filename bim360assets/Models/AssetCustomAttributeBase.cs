@@ -27,7 +27,8 @@ namespace bim360assets.Models
     /// <summary>
     /// Base Asset Status
     /// </summary>
-    public class AssetCustomAttributeBase {
+    public class AssetCustomAttributeBase
+    {
         [Key]
         public string Id { get; set; }
         public DateTime? CreatedAt { get; set; }

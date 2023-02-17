@@ -27,10 +27,11 @@ namespace bim360assets.Models
     /// <summary>
     /// Asset Status
     /// </summary>
-    public class SubAssetStatus : AssetStatusBase {
-       public string Label { get; set; }
-       public string Color { get; set; }
-       public string StatusStepSetId { get; set; }
-       public string Bucket { get; set; }
+    public class SubAssetStatus : AssetStatusBase
+    {
+        public string Label { get; set; }
+        public string Color { get; set; }
+        public string StatusStepSetId { get; set; }
+        public string Bucket { get; set; }
     }
 }

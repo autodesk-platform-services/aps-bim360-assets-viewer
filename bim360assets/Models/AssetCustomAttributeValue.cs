@@ -25,9 +25,10 @@ using bim360assets.Libs;
 namespace bim360assets.Models
 {
     /// <summary>
-    /// Base Asset Status
+    /// /// Base Asset Status
     /// </summary>
-    public class AssetCustomAttributeValue : AssetCustomAttributeBase {
+    public class AssetCustomAttributeValue : AssetCustomAttributeBase
+    {
         public string CustomAttributeId { get; set; }
     }
 }

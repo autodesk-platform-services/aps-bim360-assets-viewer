@@ -122,10 +122,10 @@ BIM360IssueExtension.prototype.createIssue = function () {
     // https://aps.autodesk.com/en/docs/bim360/v1/tutorials/pushpins/create-pushpin/
     // Once the user clicks the ``Create Pushpin`` button (see step 3), you need to grab the current position of the newly created pushpin and the pushpin data using its ID, which is automatically set to ``0``.
 
-      //from viewer 7.0, it looks the default id for new item is not 0 anymore
-      //var issue = pushPinExtension.getItemById('0');
-      //we seem to have to get it from the first item of pushpin list, which is always the latest new one
-   var issue = pushPinExtension.getItemById(pushPinExtension.pushPinManager.pushPinList[0].itemData.id ); 
+    //from viewer 7.0, it looks the default id for new item is not 0 anymore
+    //var issue = pushPinExtension.getItemById('0');
+    //we seem to have to get it from the first item of pushpin list, which is always the latest new one
+    var issue = pushPinExtension.getItemById(pushPinExtension.pushPinManager.pushPinList[0].itemData.id);
     if (issue === null) return; // safeguard
     var data = {
       type: 'quality_issues',//issue.type,
@@ -161,7 +161,7 @@ BIM360IssueExtension.prototype.createIssue = function () {
     _this.getContainerId(selected.project, selected.urn, function () {
       var urn = btoa(target_urn.split('?')[0]);
       jQuery.post({
-          url: '/api/aps/bim360/container/' + _this.containerId + '/issues/' + urn,
+        url: '/api/aps/bim360/container/' + _this.containerId + '/issues/' + urn,
         contentType: 'application/json',
         data: JSON.stringify({ data: data }),
         success: function (res) {
@@ -240,7 +240,7 @@ BIM360IssueExtension.prototype.getIssues = function (accountId, containerId, urn
   urn = urn.split('?')[0]
   urn = btoa(urn);
 
-    jQuery.get('/api/aps/bim360/account/' + accountId + '/container/' + containerId + '/issues/' + urn, function (data) {
+  jQuery.get('/api/aps/bim360/account/' + accountId + '/container/' + containerId + '/issues/' + urn, function (data) {
     _this.issues = data;
 
     // do we have issues on this document?
@@ -276,7 +276,7 @@ BIM360IssueExtension.prototype.showIssues = function () {
 
   //migrate to viewer 7.0
   //	extension.loadItems([data])
-    var pushpinDataArray = [];
+  var pushpinDataArray = [];
 
   _this.issues.forEach(function (issue) {
     var dateCreated = moment(issue.attributes.created_at);
@@ -294,19 +294,19 @@ BIM360IssueExtension.prototype.showIssues = function () {
     var issueAttributes = issue.attributes;
     var pushpinAttributes = issue.attributes.pushpin_attributes;
     if (pushpinAttributes) {
-        issue.type = issue.type.replace('quality_', ''); // temp fix during issues > quality_issues migration
+      issue.type = issue.type.replace('quality_', ''); // temp fix during issues > quality_issues migration
 
-        pushpinDataArray.push({
-            id: issue.id,
-            label: issueAttributes.identifier,
-            status: issue.type && issueAttributes.status.indexOf(issue.type) === -1 ? `${issue.type}-${issueAttributes.status}` : issueAttributes.status,
-            position: pushpinAttributes.location,
-            type: issue.type,
-            objectId: pushpinAttributes.object_id,
-            viewerState: pushpinAttributes.viewer_state
-        });
-      } 
-    })
+      pushpinDataArray.push({
+        id: issue.id,
+        label: issueAttributes.identifier,
+        status: issue.type && issueAttributes.status.indexOf(issue.type) === -1 ? `${issue.type}-${issueAttributes.status}` : issueAttributes.status,
+        position: pushpinAttributes.location,
+        type: issue.type,
+        objectId: pushpinAttributes.object_id,
+        viewerState: pushpinAttributes.viewer_state
+      });
+    }
+  })
 
   pushPinExtension.loadItems(pushpinDataArray);
 
