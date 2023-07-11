@@ -58,16 +58,19 @@ namespace bim360assets.Controllers
             return new { ContainerId = issues["id"], HubId = hubId };
         }
 
-        private async Task<IRestResponse> GetUsers(string accountId)
+        private async Task<RestResponse> GetUsers(string accountId)
         {
             TwoLeggedApi oauth = new TwoLeggedApi();
             dynamic bearer = await oauth.AuthenticateAsync(Credentials.GetAppSetting("APS_CLIENT_ID"), Credentials.GetAppSetting("APS_CLIENT_SECRET"), "client_credentials", new Scope[] { Scope.AccountRead });
 
             RestClient client = new RestClient(BASE_URL);
-            RestRequest request = new RestRequest("/hq/v1/accounts/{account_id}/users", RestSharp.Method.GET);
+            RestRequest request = new RestRequest("/hq/v1/accounts/{account_id}/users", RestSharp.Method.Get);
             request.AddParameter("account_id", accountId.Replace("b.", string.Empty), ParameterType.UrlSegment);
-            request.AddHeader("Authorization", "Bearer " + bearer.access_token);
-            return await client.ExecuteTaskAsync(request);
+
+            string token = bearer.access_token;
+            request.AddHeader("Authorization", "Bearer " + token);
+
+            return await client.ExecuteAsync(request);
         }
 
         [HttpGet]
@@ -85,28 +88,31 @@ namespace bim360assets.Controllers
         [Route("api/aps/bim360/account/{accountId}/project/{projectId}/users")]
         public async Task<IActionResult> GetBIM360ProjectUsersAsync(string accountId, [FromQuery] Nullable<int> pageOffset = null, [FromQuery] Nullable<int> pageLimit = null)
         {
-            IRestResponse usersResponse = await GetUsers(accountId/*, pageOffset, pageLimit*/);
+            RestResponse usersResponse = await GetUsers(accountId/*, pageOffset, pageLimit*/);
             var users = JsonConvert.DeserializeObject<List<User>>(usersResponse.Content);
             return Ok(users);
         }
 
-        private async Task<IRestResponse> GetProjectUsers(string accountId, string projectId, Nullable<int> pageOffset = null, Nullable<int> pageLimit = null)
+        private async Task<RestResponse> GetProjectUsers(string accountId, string projectId, Nullable<int> pageOffset = null, Nullable<int> pageLimit = null)
         {
             TwoLeggedApi oauth = new TwoLeggedApi();
             dynamic bearer = await oauth.AuthenticateAsync(Credentials.GetAppSetting("APS_CLIENT_ID"), Credentials.GetAppSetting("APS_CLIENT_SECRET"), "client_credentials", new Scope[] { Scope.AccountRead });
 
             RestClient client = new RestClient(BASE_URL);
-            RestRequest request = new RestRequest("/bim360/admin/v1/projects/{project_id}/users", RestSharp.Method.GET);
+            RestRequest request = new RestRequest("/bim360/admin/v1/projects/{project_id}/users", RestSharp.Method.Get);
             request.AddParameter("project_id", projectId.Replace("b.", string.Empty), ParameterType.UrlSegment);
-            request.AddHeader("Authorization", "Bearer " + bearer.access_token);
-            return await client.ExecuteTaskAsync(request);
+
+            string token = bearer.access_token;
+            request.AddHeader("Authorization", "Bearer " + token);
+
+            return await client.ExecuteAsync(request);
         }
 
         [HttpGet]
         [Route("api/aps/bim360/account/{accountId}/project/{projectId}/assets")]
         public async Task<IActionResult> GetBIM360AssetsAsync(string accountId, string projectId, [FromQuery] string cursorState, [FromQuery] Nullable<int> pageLimit = null)
         {
-            IRestResponse assetsResponse = await GetAssetsAsync(projectId, cursorState, pageLimit);
+            RestResponse assetsResponse = await GetAssetsAsync(projectId, cursorState, pageLimit);
             var assets = JsonConvert.DeserializeObject<PaginatedAssets>(assetsResponse.Content);
 
             string nextUrl = null;
@@ -179,7 +185,7 @@ namespace bim360assets.Controllers
             });
         }
 
-        private async Task<IRestResponse> GetAssetsAsync(string projectId, string cursorState, Nullable<int> pageLimit = null)
+        private async Task<RestResponse> GetAssetsAsync(string projectId, string cursorState, Nullable<int> pageLimit = null)
         {
             Credentials credentials = await Credentials.FromSessionAsync(base.Request.Cookies, Response.Cookies);
             if (credentials == null)
@@ -188,7 +194,7 @@ namespace bim360assets.Controllers
             }
 
             RestClient client = new RestClient(BASE_URL);
-            RestRequest request = new RestRequest("/bim360/assets/v2/projects/{project_id}/assets", RestSharp.Method.GET);
+            RestRequest request = new RestRequest("/bim360/assets/v2/projects/{project_id}/assets", RestSharp.Method.Get);
             request.AddParameter("project_id", projectId.Replace("b.", string.Empty), ParameterType.UrlSegment);
             request.AddParameter("includeCustomAttributes", true, ParameterType.QueryString);
             request.AddParameter("sort", "categoryId asc,clientAssetId asc", ParameterType.QueryString);
@@ -204,13 +210,13 @@ namespace bim360assets.Controllers
                 request.AddParameter("limit", pageLimit.Value, ParameterType.QueryString);
             }
 
-            return await client.ExecuteTaskAsync(request);
+            return await client.ExecuteAsync(request);
         }
 
         private async Task<bool> GetAllAssetsAsync(string projectId, List<Asset> assets, string cursorState, Nullable<int> pageLimit = null)
         {
             projectId = projectId.Replace("b.", string.Empty);
-            IRestResponse assetsResponse = await GetAssetsAsync(projectId, cursorState, pageLimit);
+            RestResponse assetsResponse = await GetAssetsAsync(projectId, cursorState, pageLimit);
             var data = JsonConvert.DeserializeObject<PaginatedAssets>(assetsResponse.Content);
 
             if (data.Results == null || data.Results.Count <= 0)
@@ -249,7 +255,7 @@ namespace bim360assets.Controllers
             }
             else
             {
-                IRestResponse usersResponse = await GetUsers(accountId);
+                RestResponse usersResponse = await GetUsers(accountId);
                 var users = JsonConvert.DeserializeObject<List<User>>(usersResponse.Content);
                 var userMapping = users.ToDictionary(u => u.Uid, u => u);
                 Func<string, string> getUserName = (uid) => (!string.IsNullOrWhiteSpace(uid) && userMapping.ContainsKey(uid)) ? userMapping[uid].Name : string.Empty;
@@ -379,13 +385,13 @@ namespace bim360assets.Controllers
             }
 
             RestClient client = new RestClient(BASE_URL);
-            RestRequest request = new RestRequest("/bim360/assets/v2/projects/{project_id}/assets", RestSharp.Method.GET);
+            RestRequest request = new RestRequest("/bim360/assets/v2/projects/{project_id}/assets", RestSharp.Method.Get);
             request.AddParameter("project_id", projectId.Replace("b.", string.Empty), ParameterType.UrlSegment);
             request.AddParameter("includeCustomAttributes", true, ParameterType.QueryString);
             request.AddParameter("filter[searchText]", text, ParameterType.QueryString);
             request.AddHeader("Authorization", "Bearer " + credentials.TokenInternal);
 
-            IRestResponse assetsResponse = await client.ExecuteTaskAsync(request);
+            RestResponse assetsResponse = await client.ExecuteAsync(request);
             var assets = JsonConvert.DeserializeObject<PaginatedAssets>(assetsResponse.Content);
 
             if (assets.Results == null || assets.Results.Count <= 0)
@@ -413,7 +419,7 @@ namespace bim360assets.Controllers
             }
 
             RestClient client = new RestClient(BASE_URL);
-            RestRequest request = new RestRequest("/bim360/assets/v2/projects/{project_id}/assets", RestSharp.Method.GET);
+            RestRequest request = new RestRequest("/bim360/assets/v2/projects/{project_id}/assets", RestSharp.Method.Get);
             request.AddParameter("project_id", projectId.Replace("b.", string.Empty), ParameterType.UrlSegment);
             request.AddParameter("includeCustomAttributes", true, ParameterType.QueryString);
 
@@ -421,7 +427,7 @@ namespace bim360assets.Controllers
             request.AddParameter(attrFilter, id, ParameterType.QueryString);
             request.AddHeader("Authorization", "Bearer " + credentials.TokenInternal);
 
-            IRestResponse assetsResponse = await client.ExecuteTaskAsync(request);
+            RestResponse assetsResponse = await client.ExecuteAsync(request);
             var assets = JsonConvert.DeserializeObject<PaginatedAssets>(assetsResponse.Content);
 
             if (assets.Results == null || assets.Results.Count <= 0)
@@ -432,7 +438,7 @@ namespace bim360assets.Controllers
 
         private async Task<Asset> GetAssetsByIdAsync(string projectId, string id, string cursorState, Nullable<int> pageLimit = null)
         {
-            IRestResponse assetsResponse = await GetAssetsAsync(projectId.Replace("b.", string.Empty), cursorState, pageLimit);
+            RestResponse assetsResponse = await GetAssetsAsync(projectId.Replace("b.", string.Empty), cursorState, pageLimit);
             var assets = JsonConvert.DeserializeObject<PaginatedAssets>(assetsResponse.Content);
 
             if (assets.Results == null || assets.Results.Count <= 0)
@@ -504,11 +510,11 @@ namespace bim360assets.Controllers
             return Ok(attrDefs.Results);
         }
 
-        private async Task<IRestResponse> GetCustomAttributeDefsAsync(string projectId, string cursorState, Nullable<int> pageLimit = null)
+        private async Task<RestResponse> GetCustomAttributeDefsAsync(string projectId, string cursorState, Nullable<int> pageLimit = null)
         {
             Credentials credentials = await Credentials.FromSessionAsync(base.Request.Cookies, Response.Cookies);
             RestClient client = new RestClient(BASE_URL);
-            RestRequest request = new RestRequest("/bim360/assets/v1/projects/{project_id}/custom-attributes", RestSharp.Method.GET);
+            RestRequest request = new RestRequest("/bim360/assets/v1/projects/{project_id}/custom-attributes", RestSharp.Method.Get);
             request.AddParameter("project_id", projectId.Replace("b.", string.Empty), ParameterType.UrlSegment);
             request.AddHeader("Authorization", "Bearer " + credentials.TokenInternal);
 
@@ -522,14 +528,14 @@ namespace bim360assets.Controllers
                 request.AddParameter("limit", pageLimit.Value, ParameterType.QueryString);
             }
 
-            return await client.ExecuteTaskAsync(request);
+            return await client.ExecuteAsync(request);
         }
 
         [HttpGet]
         [Route("api/aps/bim360/account/{accountId}/project/{projectId}/asset-categories")]
         public async Task<IActionResult> GetBIM360AssetCategoriesAsync(string accountId, string projectId, [FromQuery] string cursorState, [FromQuery] Nullable<int> pageLimit = null, [FromQuery] bool buildTree = false)
         {
-            IRestResponse categoriesResponse = await GetAssetCategoriesAsync(projectId.Replace("b.", string.Empty), cursorState, pageLimit);
+            RestResponse categoriesResponse = await GetAssetCategoriesAsync(projectId.Replace("b.", string.Empty), cursorState, pageLimit);
             var categories = JsonConvert.DeserializeObject<PaginatedAssetCategories>(categoriesResponse.Content);
 
             if (buildTree == false)
@@ -544,11 +550,11 @@ namespace bim360assets.Controllers
             }
         }
 
-        private async Task<IRestResponse> GetAssetCategoriesAsync(string projectId, string cursorState, Nullable<int> pageLimit = null)
+        private async Task<RestResponse> GetAssetCategoriesAsync(string projectId, string cursorState, Nullable<int> pageLimit = null)
         {
             Credentials credentials = await Credentials.FromSessionAsync(base.Request.Cookies, Response.Cookies);
             RestClient client = new RestClient(BASE_URL);
-            RestRequest request = new RestRequest("/bim360/assets/v1/projects/{project_id}/categories", RestSharp.Method.GET);
+            RestRequest request = new RestRequest("/bim360/assets/v1/projects/{project_id}/categories", RestSharp.Method.Get);
             request.AddParameter("project_id", projectId.Replace("b.", string.Empty), ParameterType.UrlSegment);
             request.AddHeader("Authorization", "Bearer " + credentials.TokenInternal);
 
@@ -562,24 +568,24 @@ namespace bim360assets.Controllers
                 request.AddParameter("limit", pageLimit.Value, ParameterType.QueryString);
             }
 
-            return await client.ExecuteTaskAsync(request);
+            return await client.ExecuteAsync(request);
         }
 
         [HttpGet]
         [Route("api/aps/bim360/account/{accountId}/project/{projectId}/asset-statuses")]
         public async Task<IActionResult> GetBIM360AssetStatusesAsync(string accountId, string projectId, [FromQuery] string cursorState, [FromQuery] Nullable<int> pageLimit = null)
         {
-            IRestResponse statusesResponse = await GetAssetStatusessAsync(projectId, cursorState, pageLimit);
+            RestResponse statusesResponse = await GetAssetStatusessAsync(projectId, cursorState, pageLimit);
             var statuses = JsonConvert.DeserializeObject<PaginatedAssetStatuses>(statusesResponse.Content);
 
             return Ok(statuses.Results);
         }
 
-        private async Task<IRestResponse> GetAssetStatusessAsync(string projectId, string cursorState, Nullable<int> pageLimit = null)
+        private async Task<RestResponse> GetAssetStatusessAsync(string projectId, string cursorState, Nullable<int> pageLimit = null)
         {
             Credentials credentials = await Credentials.FromSessionAsync(base.Request.Cookies, Response.Cookies);
             RestClient client = new RestClient(BASE_URL);
-            RestRequest request = new RestRequest("/bim360/assets/v1/projects/{project_id}/status-step-sets", RestSharp.Method.GET);
+            RestRequest request = new RestRequest("/bim360/assets/v1/projects/{project_id}/status-step-sets", RestSharp.Method.Get);
             request.AddParameter("project_id", projectId.Replace("b.", string.Empty), ParameterType.UrlSegment);
             request.AddHeader("Authorization", "Bearer " + credentials.TokenInternal);
 
@@ -593,14 +599,14 @@ namespace bim360assets.Controllers
                 request.AddParameter("limit", pageLimit.Value, ParameterType.QueryString);
             }
 
-            return await client.ExecuteTaskAsync(request);
+            return await client.ExecuteAsync(request);
         }
 
         // [HttpGet]
         // [Route("api/aps/bim360/account/{accountId}/project/{projectId}/locations")]
         // public async Task<IActionResult> GetBIM360LocationsAsync(string accountId, string projectId, [FromQuery] bool buildTree = false)
         // {
-        //     IRestResponse locsResponse = await GetLocationsAsync(accountId, projectId);
+        //     RestResponse locsResponse = await GetLocationsAsync(accountId, projectId);
         //     var locations = JsonConvert.DeserializeObject<PaginatedLocations>(locsResponse.Content);
 
         //     if (buildTree == false)
@@ -643,19 +649,19 @@ namespace bim360assets.Controllers
             return containerId;
         }
 
-        // private async Task<IRestResponse> GetLocationsAsync(string accountId, string projectId)
+        // private async Task<RestResponse> GetLocationsAsync(string accountId, string projectId)
         // {
         //     var containerId = await GetContainerIdAsync(accountId, projectId, ContainerType.Locations);
 
         //     Credentials credentials = await Credentials.FromSessionAsync(base.Request.Cookies, Response.Cookies);
 
         //     RestClient client = new RestClient(BASE_URL);
-        //     RestRequest request = new RestRequest("/bim360/locations/v2/containers/{container_id}/trees/{tree_id}/nodes", RestSharp.Method.GET);
+        //     RestRequest request = new RestRequest("/bim360/locations/v2/containers/{container_id}/trees/{tree_id}/nodes", RestSharp.Method.Get);
         //     request.AddParameter("container_id", containerId, ParameterType.UrlSegment);
         //     request.AddParameter("tree_id", "default", ParameterType.UrlSegment);
         //     request.AddHeader("Authorization", "Bearer " + credentials.TokenInternal);
 
-        //     return await client.ExecuteTaskAsync(request);
+        //     return await client.ExecuteAsync(request);
         // }
     }
 }

@@ -20,6 +20,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Autodesk.Forge;
+using Autodesk.Forge.Api;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
 using System.Net;
@@ -123,7 +124,7 @@ namespace bim360assets.Controllers
         /// <returns></returns>
         public static async Task<Credentials> CreateFromCodeAsync(string code, IResponseCookies cookies)
         {
-            ThreeLeggedApi oauth = new ThreeLeggedApi();
+            ThreeLeggedApiV2 oauth = new ThreeLeggedApiV2();
 
             dynamic credentialInternal = await oauth.GettokenAsync(
               GetAppSetting("APS_CLIENT_ID"), GetAppSetting("APS_CLIENT_SECRET"),
