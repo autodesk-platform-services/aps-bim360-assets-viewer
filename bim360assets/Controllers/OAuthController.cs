@@ -124,7 +124,7 @@ namespace bim360assets.Controllers
         /// <returns></returns>
         public static async Task<Credentials> CreateFromCodeAsync(string code, IResponseCookies cookies)
         {
-            ThreeLeggedApiV2 oauth = new ThreeLeggedApiV2();
+            ThreeLeggedApi oauth = new ThreeLeggedApi();
 
             dynamic credentialInternal = await oauth.GettokenAsync(
               GetAppSetting("APS_CLIENT_ID"), GetAppSetting("APS_CLIENT_SECRET"),
