@@ -33,41 +33,43 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Autodesk.Authentication.Model;
 
 namespace bim360assets.Controllers
 {
-    public partial class BIM360Controller : ControllerBase
+    public partial class BIM360Controller : Controller
     {
         private const string BASE_URL = "https://developer.api.autodesk.com";
+        private readonly ILogger<BIM360Controller> _logger;
+        private readonly APS _aps;
+        private Tokens _tokens;
 
-        [HttpGet]
-        [Route("api/aps/bim360/container")]
-        public async Task<dynamic> GetContainerAsync(string href)
+        public override async void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            string[] idParams = href.Split('/');
-            string projectId = idParams[idParams.Length - 1];
-            string hubId = idParams[idParams.Length - 3];
+            base.OnActionExecuting(filterContext);
 
-            Credentials credentials = await Credentials.FromSessionAsync(base.Request.Cookies, Response.Cookies);
+            this._tokens = await AuthController.PrepareTokens(Request, Response, _aps);
+            if (this._tokens == null)
+            {
+                filterContext.Result = Unauthorized();
+            }
+        }
 
-            ProjectsApi projectsApi = new ProjectsApi();
-            projectsApi.Configuration.AccessToken = credentials.TokenInternal;
-            var project = await projectsApi.GetProjectAsync(hubId, projectId);
-            var issues = project.data.relationships.issues.data;
-            if (issues.type != "issueContainerId") return null;
-            return new { ContainerId = issues["id"], HubId = hubId };
+        public BIM360Controller(ILogger<BIM360Controller> logger, APS aps)
+        {
+            _logger = logger;
+            _aps = aps;
         }
 
         private async Task<RestResponse> GetUsers(string accountId)
         {
-            TwoLeggedApi oauth = new TwoLeggedApi();
-            dynamic bearer = await oauth.AuthenticateAsync(Credentials.GetAppSetting("APS_CLIENT_ID"), Credentials.GetAppSetting("APS_CLIENT_SECRET"), "client_credentials", new Scope[] { Scope.AccountRead });
+            string token = await _aps.GetTwoLeggedToken(new List<Scopes> { Scopes.AccountRead });
 
             RestClient client = new RestClient(BASE_URL);
             RestRequest request = new RestRequest("/hq/v1/accounts/{account_id}/users", RestSharp.Method.Get);
             request.AddParameter("account_id", accountId.Replace("b.", string.Empty), ParameterType.UrlSegment);
-
-            string token = bearer.access_token;
             request.AddHeader("Authorization", "Bearer " + token);
 
             return await client.ExecuteAsync(request);
@@ -95,14 +97,11 @@ namespace bim360assets.Controllers
 
         private async Task<RestResponse> GetProjectUsers(string accountId, string projectId, Nullable<int> pageOffset = null, Nullable<int> pageLimit = null)
         {
-            TwoLeggedApi oauth = new TwoLeggedApi();
-            dynamic bearer = await oauth.AuthenticateAsync(Credentials.GetAppSetting("APS_CLIENT_ID"), Credentials.GetAppSetting("APS_CLIENT_SECRET"), "client_credentials", new Scope[] { Scope.AccountRead });
+            string token = await _aps.GetTwoLeggedToken(new List<Scopes> { Scopes.AccountRead });
 
             RestClient client = new RestClient(BASE_URL);
             RestRequest request = new RestRequest("/bim360/admin/v1/projects/{project_id}/users", RestSharp.Method.Get);
             request.AddParameter("project_id", projectId.Replace("b.", string.Empty), ParameterType.UrlSegment);
-
-            string token = bearer.access_token;
             request.AddHeader("Authorization", "Bearer " + token);
 
             return await client.ExecuteAsync(request);
@@ -187,18 +186,12 @@ namespace bim360assets.Controllers
 
         private async Task<RestResponse> GetAssetsAsync(string projectId, string cursorState, Nullable<int> pageLimit = null)
         {
-            Credentials credentials = await Credentials.FromSessionAsync(base.Request.Cookies, Response.Cookies);
-            if (credentials == null)
-            {
-                throw new InvalidOperationException("Failed to refresh access token");
-            }
-
             RestClient client = new RestClient(BASE_URL);
             RestRequest request = new RestRequest("/bim360/assets/v2/projects/{project_id}/assets", RestSharp.Method.Get);
             request.AddParameter("project_id", projectId.Replace("b.", string.Empty), ParameterType.UrlSegment);
             request.AddParameter("includeCustomAttributes", true, ParameterType.QueryString);
             request.AddParameter("sort", "categoryId asc,clientAssetId asc", ParameterType.QueryString);
-            request.AddHeader("Authorization", "Bearer " + credentials.TokenInternal);
+            request.AddHeader("Authorization", "Bearer " + this._tokens.InternalToken);
 
             if (!string.IsNullOrWhiteSpace(cursorState))
             {
@@ -378,18 +371,12 @@ namespace bim360assets.Controllers
 
         private async Task<Asset> GetAssetsBySearchTextAsync(string projectId, string text)
         {
-            Credentials credentials = await Credentials.FromSessionAsync(base.Request.Cookies, Response.Cookies);
-            if (credentials == null)
-            {
-                throw new InvalidOperationException("Failed to refresh access token");
-            }
-
             RestClient client = new RestClient(BASE_URL);
             RestRequest request = new RestRequest("/bim360/assets/v2/projects/{project_id}/assets", RestSharp.Method.Get);
             request.AddParameter("project_id", projectId.Replace("b.", string.Empty), ParameterType.UrlSegment);
             request.AddParameter("includeCustomAttributes", true, ParameterType.QueryString);
             request.AddParameter("filter[searchText]", text, ParameterType.QueryString);
-            request.AddHeader("Authorization", "Bearer " + credentials.TokenInternal);
+            request.AddHeader("Authorization", "Bearer " + this._tokens.InternalToken);
 
             RestResponse assetsResponse = await client.ExecuteAsync(request);
             var assets = JsonConvert.DeserializeObject<PaginatedAssets>(assetsResponse.Content);
@@ -402,12 +389,6 @@ namespace bim360assets.Controllers
 
         private async Task<Asset> GetAssetsByExtIdAsync(string projectId, string id)
         {
-            Credentials credentials = await Credentials.FromSessionAsync(base.Request.Cookies, Response.Cookies);
-            if (credentials == null)
-            {
-                throw new InvalidOperationException("Failed to refresh access token");
-            }
-
             var attrDefsResponse = await GetCustomAttributeDefsAsync(projectId.Replace("b.", string.Empty), null, 100);
             var attrDefs = JsonConvert.DeserializeObject<PaginatedAssetCustomAttributes>(attrDefsResponse.Content);
             var attrDefMapping = attrDefs.Results.ToDictionary(d => d.DisplayName, d => d);
@@ -425,7 +406,7 @@ namespace bim360assets.Controllers
 
             var attrFilter = string.Format("filter[customAttributes][{0}]", extIdAttr.Name);
             request.AddParameter(attrFilter, id, ParameterType.QueryString);
-            request.AddHeader("Authorization", "Bearer " + credentials.TokenInternal);
+            request.AddHeader("Authorization", "Bearer " + this._tokens.InternalToken);
 
             RestResponse assetsResponse = await client.ExecuteAsync(request);
             var assets = JsonConvert.DeserializeObject<PaginatedAssets>(assetsResponse.Content);
@@ -512,11 +493,10 @@ namespace bim360assets.Controllers
 
         private async Task<RestResponse> GetCustomAttributeDefsAsync(string projectId, string cursorState, Nullable<int> pageLimit = null)
         {
-            Credentials credentials = await Credentials.FromSessionAsync(base.Request.Cookies, Response.Cookies);
             RestClient client = new RestClient(BASE_URL);
             RestRequest request = new RestRequest("/bim360/assets/v1/projects/{project_id}/custom-attributes", RestSharp.Method.Get);
             request.AddParameter("project_id", projectId.Replace("b.", string.Empty), ParameterType.UrlSegment);
-            request.AddHeader("Authorization", "Bearer " + credentials.TokenInternal);
+            request.AddHeader("Authorization", "Bearer " + this._tokens.InternalToken);
 
             if (!string.IsNullOrWhiteSpace(cursorState))
             {
@@ -552,11 +532,10 @@ namespace bim360assets.Controllers
 
         private async Task<RestResponse> GetAssetCategoriesAsync(string projectId, string cursorState, Nullable<int> pageLimit = null)
         {
-            Credentials credentials = await Credentials.FromSessionAsync(base.Request.Cookies, Response.Cookies);
             RestClient client = new RestClient(BASE_URL);
             RestRequest request = new RestRequest("/bim360/assets/v1/projects/{project_id}/categories", RestSharp.Method.Get);
             request.AddParameter("project_id", projectId.Replace("b.", string.Empty), ParameterType.UrlSegment);
-            request.AddHeader("Authorization", "Bearer " + credentials.TokenInternal);
+            request.AddHeader("Authorization", "Bearer " + this._tokens.InternalToken);
 
             if (!string.IsNullOrWhiteSpace(cursorState))
             {
@@ -583,11 +562,10 @@ namespace bim360assets.Controllers
 
         private async Task<RestResponse> GetAssetStatusessAsync(string projectId, string cursorState, Nullable<int> pageLimit = null)
         {
-            Credentials credentials = await Credentials.FromSessionAsync(base.Request.Cookies, Response.Cookies);
             RestClient client = new RestClient(BASE_URL);
             RestRequest request = new RestRequest("/bim360/assets/v1/projects/{project_id}/status-step-sets", RestSharp.Method.Get);
             request.AddParameter("project_id", projectId.Replace("b.", string.Empty), ParameterType.UrlSegment);
-            request.AddHeader("Authorization", "Bearer " + credentials.TokenInternal);
+            request.AddHeader("Authorization", "Bearer " + this._tokens.InternalToken);
 
             if (!string.IsNullOrWhiteSpace(cursorState))
             {
@@ -623,30 +601,15 @@ namespace bim360assets.Controllers
 
         private async Task<string> GetContainerIdAsync(string accountId, string projectId, ContainerType type)
         {
-            Credentials credentials = await Credentials.FromSessionAsync(base.Request.Cookies, Response.Cookies);
+            var project = await _aps.GetProject(accountId, projectId, this._tokens);
+            var relationships = project.Data.Relationships;
 
-            ProjectsApi projectsApi = new ProjectsApi();
-            projectsApi.Configuration.AccessToken = credentials.TokenInternal;
-            var project = await projectsApi.GetProjectAsync(accountId, projectId);
-            var relationships = project.data.relationships;
-            string containerId = string.Empty;
-
-            var result = relationships.Dictionary;
-
-            foreach (var relation in result)
-            {
-                string name = relation.Key;
-                if (name != type.Value)
-                    continue;
-
-                var data = relation.Value.data;
-                if (data == null || !data.type.Contains(type.Value))
-                    continue;
-
-                containerId = data.id;
-            }
-
-            return containerId;
+            if(type == ContainerType.Issues)
+                return relationships.Issues.Data.Id;
+            else if(type == ContainerType.Locations)
+                return relationships.Locations.Data.Id;
+            else
+                return string.Empty;
         }
 
         // private async Task<RestResponse> GetLocationsAsync(string accountId, string projectId)

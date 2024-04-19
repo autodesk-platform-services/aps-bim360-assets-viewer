@@ -36,11 +36,25 @@ using Microsoft.AspNetCore.Http;
 
 namespace bim360assets.Controllers
 {
-    public partial class BIM360Controller : ControllerBase
+    public partial class BIM360Controller : Controller
     {
+        [HttpGet]
+        [Route("api/aps/bim360/container")]
+        public async Task<dynamic> GetContainerAsync(string href)
+        {
+            string[] idParams = href.Split('/');
+            string projectId = idParams[idParams.Length - 1];
+            string hubId = idParams[idParams.Length - 3];
+
+            var project = await _aps.GetProject(hubId, projectId, this._tokens);
+            var issues = project.Data.Relationships.Issues.Data;
+            if (issues.Type != "issueContainerId") return null;
+
+            return new { ContainerId = issues.Id, HubId = hubId };
+        }
+
         private async Task<RestResponse> GetIssuesAsync(string containerId, string resource, string urn)
         {
-            Credentials credentials = await Credentials.FromSessionAsync(base.Request.Cookies, Response.Cookies);
             urn = Encoding.UTF8.GetString(Convert.FromBase64String(urn));
 
             RestClient client = new RestClient(BASE_URL);
@@ -48,7 +62,7 @@ namespace bim360assets.Controllers
             request.AddParameter("container_id", containerId, ParameterType.UrlSegment);
             request.AddParameter("urn", urn, ParameterType.UrlSegment);
             request.AddParameter("resource", resource, ParameterType.UrlSegment);
-            request.AddHeader("Authorization", "Bearer " + credentials.TokenInternal);
+            request.AddHeader("Authorization", "Bearer " + this._tokens.InternalToken);
             return await client.ExecuteAsync(request);
         }
 
@@ -78,13 +92,11 @@ namespace bim360assets.Controllers
 
         private async Task<RestResponse> PostIssuesAsync(string containerId, string resource, JObject data)
         {
-            Credentials credentials = await Credentials.FromSessionAsync(base.Request.Cookies, Response.Cookies);
-
             RestClient client = new RestClient(BASE_URL);
             RestRequest request = new RestRequest("/issues/v1/containers/{container_id}/{resource}", RestSharp.Method.Post);
             request.AddParameter("container_id", containerId, ParameterType.UrlSegment);
             request.AddParameter("resource", resource, ParameterType.UrlSegment);
-            request.AddHeader("Authorization", "Bearer " + credentials.TokenInternal);
+            request.AddHeader("Authorization", "Bearer " + this._tokens.InternalToken);
             request.AddHeader("Content-Type", "application/vnd.api+json");
             request.AddParameter("text/json", Newtonsoft.Json.JsonConvert.SerializeObject(data), ParameterType.RequestBody);
 
@@ -93,12 +105,10 @@ namespace bim360assets.Controllers
 
         private async Task<RestResponse> GetIssueTypesAsync(string containerId)
         {
-            Credentials credentials = await Credentials.FromSessionAsync(base.Request.Cookies, Response.Cookies);
-
             RestClient client = new RestClient(BASE_URL);
             RestRequest request = new RestRequest("/issues/v1/containers/{container_id}/ng-issue-types?include=subtypes", RestSharp.Method.Get);
             request.AddParameter("container_id", containerId, ParameterType.UrlSegment);
-            request.AddHeader("Authorization", "Bearer " + credentials.TokenInternal);
+            request.AddHeader("Authorization", "Bearer " + this._tokens.InternalToken);
             request.AddHeader("Content-Type", "application/vnd.api+json");
 
             return await client.ExecuteAsync(request);

@@ -25,11 +25,11 @@ function launchViewer(urn, viewableId) {
     viewer = null
     $("#apsViewer").empty();
   }
-  var options = {
-    env: 'AutodeskProduction',
-    api: 'derivativeV2' + (atob(urn.replace('_', '/')).indexOf('emea') > -1 ? '_EU' : ''),
-    // env: 'AutodeskProduction2',
-    // api: 'streamingV2' + (atob(urn.replace('urn:', '').replace('_', '/')).indexOf('emea') > -1 ? '_EU' : ''),
+  const options = {
+    // env: 'AutodeskProduction',
+    // api: 'derivativeV2' + (atob(urn.replace('_', '/')).indexOf('emea') > -1 ? '_EU' : ''),
+    env: 'AutodeskProduction2',
+    api: 'streamingV2' + (atob(urn.replace('urn:', '').replace('_', '/')).indexOf('emea') > -1 ? '_EU' : ''),
     getAccessToken: getApsToken
   };
 
@@ -39,15 +39,13 @@ function launchViewer(urn, viewableId) {
     };
     viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('apsViewer'), config3d);
     viewer.start();
-    var documentId = 'urn:' + urn;
+    const documentId = 'urn:' + urn;
     Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
   });
   async function onDocumentLoadSuccess(doc) {
     await doc.downloadAecModelData();
-    var viewables = (viewableId ? doc.getRoot().findByGuid(viewableId) : doc.getRoot().getDefaultGeometry());
-    viewer.loadDocumentNode(doc, viewables).then(i => {
-
-    });
+    let viewables = (viewableId ? doc.getRoot().findByGuid(viewableId) : doc.getRoot().getDefaultGeometry());
+    viewer.loadDocumentNode(doc, viewables);
   }
 
   function onDocumentLoadFailure(viewerErrorCode) {
@@ -59,7 +57,7 @@ function launchViewer(urn, viewableId) {
 
 function getApsToken(callback) {
   jQuery.ajax({
-    url: '/api/aps/oauth/token',
+    url: '/api/auth/token',
     success: function (res) {
       callback(res.access_token, res.expires_in)
     }
