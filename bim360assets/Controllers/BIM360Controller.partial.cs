@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
-// Written by Developer Advocate and Support
+// Written by Developer Advocacy and Support
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted,
@@ -20,23 +20,13 @@ using System;
 using System.Text;
 using System.Net;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Autodesk.Forge;
 using RestSharp;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using bim360assets.Models;
-using System.Web;
-using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.AspNetCore.WebUtilities;
-using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Http;
 
 namespace bim360assets.Controllers
 {
-    public partial class BIM360Controller : Controller
+    public partial class BIM360Controller : OAuthBasedController
     {
         [HttpGet]
         [Route("api/aps/bim360/container")]

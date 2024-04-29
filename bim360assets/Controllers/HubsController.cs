@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
-// Written by Developer Advocate and Support
+// Written by Developer Advocacy and Support
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted,
@@ -33,11 +33,9 @@ namespace bim360assets.Controllers
 {
     [ApiController]
     [Route("api/datamanagement")]
-    public class HubsController : Controller
+    public class HubsController : OAuthBasedController
     {
         private readonly ILogger<HubsController> _logger;
-        private readonly APS _aps;
-        private Tokens _tokens;
 
         public static string Base64Encode(string plainText)
         {
@@ -45,21 +43,9 @@ namespace bim360assets.Controllers
             return System.Convert.ToBase64String(plainTextBytes).Replace("/", "_");
         }
 
-        public override async void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            base.OnActionExecuting(filterContext);
-
-            this._tokens = await AuthController.PrepareTokens(Request, Response, _aps);
-            if (this._tokens == null)
-            {
-                filterContext.Result = Unauthorized();
-            }
-        }
-
-        public HubsController(ILogger<HubsController> logger, APS aps)
+        public HubsController(ILogger<HubsController> logger, APS aps) : base(aps)
         {
             _logger = logger;
-            _aps = aps;
         }
 
         [HttpGet()]

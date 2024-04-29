@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
-// Written by Developer Advocate and Support
+// Written by Developer Advocacy and Support
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted,
@@ -123,7 +123,7 @@ namespace bim360assets.Controllers
         }
 
         [HttpGet]
-        [Route("/api/aps/clientid")] // see Web.Config APS_CALLBACK_URL variable
+        [Route("clientid")] // see Web.Config APS_CALLBACK_URL variable
         public dynamic GetClientID()
         {
             return new { id = _aps.ClientId };

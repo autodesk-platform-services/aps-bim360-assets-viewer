@@ -1,6 +1,6 @@
 ﻿/////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
-// Written by Developer Advocate and Support
+// Written by Developer Advocacy and Support
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted,
@@ -50,7 +50,7 @@ $(document).ready(function () {
     window.location.replace('/api/auth/login')
   })
 
-  $.getJSON("/api/aps/clientid", function (res) {
+  $.getJSON("/api/clientid", function (res) {
     $("#ClientID").val(res.id);
     $("#provisionAccountSave").click(function () {
       $('#provisionAccountModal').modal('toggle');

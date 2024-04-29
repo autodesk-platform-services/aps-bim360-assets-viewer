@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
-// Written by Developer Advocate and Support
+// Written by Developer Advocacy and Support
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted,
@@ -18,49 +18,31 @@
 
 using System;
 using System.Text;
-using System.Net;
+using System.Web;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
-using Autodesk.Forge;
-using RestSharp;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using bim360assets.Models;
-using System.Web;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.WebUtilities;
-using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Mvc.Filters;
+using RestSharp;
+using Newtonsoft.Json;
 using Autodesk.Authentication.Model;
+using bim360assets.Models;
 
 namespace bim360assets.Controllers
 {
-    public partial class BIM360Controller : Controller
+    public partial class BIM360Controller : OAuthBasedController
     {
         private const string BASE_URL = "https://developer.api.autodesk.com";
         private readonly ILogger<BIM360Controller> _logger;
-        private readonly APS _aps;
-        private Tokens _tokens;
 
-        public override async void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            base.OnActionExecuting(filterContext);
-
-            this._tokens = await AuthController.PrepareTokens(Request, Response, _aps);
-            if (this._tokens == null)
-            {
-                filterContext.Result = Unauthorized();
-            }
-        }
-
-        public BIM360Controller(ILogger<BIM360Controller> logger, APS aps)
+        public BIM360Controller(ILogger<BIM360Controller> logger, APS aps) : base(aps)
         {
             _logger = logger;
-            _aps = aps;
         }
 
         private async Task<RestResponse> GetUsers(string accountId)
