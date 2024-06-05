@@ -195,7 +195,7 @@ This sample uses .NET and works fine on both Windows and MacOS, see [this tutori
 
 2. **Error setting certificate verify locations** error: may happen on Windows, use the following: `git config --global http.sslverify "false"`
 
-3. **Enable SVF2 Support** : You must use viewer **v7.36 & newer versions** to support loading hidden fragments (e.g., Rooms) in SVF2, then change codes as below:
+3. **Enable SVF2 Support** : (SVF2 support is enabled by default) You must use viewer **v7.36 & newer versions** to support loading hidden fragments (e.g., Rooms) in SVF2, then change codes as below:
 
     - Change viewer's env and api to `env: 'AutodeskProduction2'` and `api: 'streamingV2'` like below in [bim360assets/wwwroot/js/APSViewer.js#L31](bim360assets/wwwroot/js/APSViewer.js#L31)
         ```javascript
